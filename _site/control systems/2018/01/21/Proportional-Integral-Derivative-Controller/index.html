@@ -83,7 +83,7 @@
 <link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Pushkal Katara" />
+  <meta name="keywords" content="SRMAUV,Control Systems," />
 
 
 
@@ -111,14 +111,17 @@
 
 
 
-<meta name="keywords" content="Pushkal Katara">
-<meta property="og:type" content="website">
-<meta property="og:title" content="HELLO WORLD!">
-<meta property="og:url" content="http://localhost:4000/">
+<meta name="description" content="Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here’s my intutition -">
+<meta name="keywords" content="SRMAUV, Control Systems">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proportional-Integral-Derivative Controller">
+<meta property="og:url" content="http://localhost:4000/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller/">
 <meta property="og:site_name" content="HELLO WORLD!">
+<meta property="og:description" content="Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here’s my intutition -">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HELLO WORLD!">
+<meta name="twitter:title" content="Proportional-Integral-Derivative Controller">
+<meta name="twitter:description" content="Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here’s my intutition -">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -151,7 +154,7 @@
 
 
 
-  <title>HELLO WORLD!</title>
+  <title>Proportional-Integral-Derivative Controller</title>
   
 
 
@@ -176,7 +179,7 @@
   
   
 
-  <div class="container sidebar-position-left page-home ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,12 +269,9 @@
           <div id="content" class="content">
             
 
-
-
-<section id="posts" class="posts-expand">
+<div id="posts" class="posts-expand">
   
-    
-    
+  
 
   
 
@@ -300,12 +300,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            
-                
-                <a class="post-title-link" href="/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller/" itemprop="url">
-                Proportional-Integral-Derivative Controller
-              </a>
-            
+            Proportional-Integral-Derivative Controller
           
         </h1>
         
@@ -366,6 +361,8 @@
           
 
           
+            
+          
 
         </div>
       </header>
@@ -377,63 +374,157 @@
       
 
       
+        <p>Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here’s my intutition -</p>
+
+<hr />
+
+<h2 id="proportional-term">Proportional Term:</h2>
+
+<p>Mr. Proportional : He looks at where the output is and compares to what you asked for. Hence it says:</p>
+<ul>
+  <li>There is large error : Take Big Action</li>
+  <li>There is small error : Take Small Action</li>
+  <li>You have is what you asked for : Take No Action</li>
+</ul>
+
+<p>So basically what is this error?<br />
+Take a scenario of depth controller in an AUV, Pressure sensor returns the measured pressure value which is the value you have and now you want to reach a particular pressure value say from 520 to 530. So you’ll probablly have to initiate depth thrusters. The change in PWM of thruster servos must be controlled through a controller, here’s where the controller part comes in to reduce the error form 10 to 0.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pError = Setpoint - SensorValue;
+</code></pre>
+</div>
+
+<p>P<sub>out</sub> = K<sub>p</sub> * pError
+K<sub>p</sub> - Proportional Gain Constant.<br />
+Issue with P: Steady State Error.</p>
+
+<hr />
+
+<h2 id="integral-term">Integral Term:</h2>
+
+<p>Mr. Integral : He looks at the same error value, but compares it to how long its been that way and states:</p>
+<ul>
+  <li>You have a chronic/acute error (Small errors for long time/ Big error or small time) - Take Big Action</li>
+  <li>You have mild error (Small error for short time) - Take Small Action</li>
+  <li>Your error history is neutral - Take No Action</li>
+</ul>
+
+<p>What is the use of Integral term?<br />
+Actually when ‘P’ mode alone is used, we would face the offset (+ve or -ve deviation from setpoint) problem.
+Consider the case of heading controller in an AUV, Inertial Measurment Sensor would provide the heading angles, now say a setpoint to turn 30 degree, Proportional would take action generating an offset, making the vehicle oscillate around +ive and  -ive directions of setpoint. In order to nullify steady state error, ‘I’ mode is introduced, Integral action would add up all the error with respect to time and it will track the system to its setpoint.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>iError = iError + pError * dt;  
+</code></pre>
+</div>
+
+<p>I<sub>out</sub> = K<sub>i</sub> * <script type="math/tex">\int_0^t pError(t) \,dt</script><br />
+K<sub>i</sub> = Integral Gain Constant</p>
+
+<p>Issue with PI: Overshooting-Integral Windup i.e When large change in setpoint occurs, Integral term accumulates a significant error during the rise, thus overshooting, making PI controller ineffective in dynamic conditions.<br />
+Amazing example of Integral Windup - <a href="https://instrumentationtools.com/what-is-integral-wind-up/">ClickMe</a></p>
+
+<hr />
+
+<h2 id="derivative-term">Derivative Term:</h2>
+
+<p>Mr. Derivative: He also looks at the same error, but compares it to how its changing. He says:</p>
+<ul>
+  <li>Error is getting bigger: Take bigger action</li>
+  <li>Error is getting smaller: Take negative action</li>
+  <li>Error is not changing: Take no action</li>
+</ul>
+
+<p>What does Derivative Term work on?<br />
+While driving a car behind someone who is already at stop. As you get closer to them, not only you want to leave the accelerator, but also want to apply brake. This braking action is given by Derivative in PID Controller. It tells to slowdown more if you are getting closer to the target. Derivative control adds another dimension of complexity to control loops. It does have its benefits, but only in special cases.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>dError = (pError - previousError);
+</code></pre>
+</div>
+
+<p>D<sub>out</sub> = K<sub>d</sub> * <script type="math/tex">\frac{d pError(t)}{dt}</script><br />
+K<sub>d</sub> = Derivative Gain Constant</p>
+
+<hr />
+<p>Summing up the above three controllers:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>ControlSignal = kp*pError + ki*iError + kd*dError;
+</code></pre>
+</div>
+<p>P<sub>out</sub> + I<sub>out</sub> + D<sub>out</sub> =  K<sub>p</sub> * pError + K<sub>i</sub> * <script type="math/tex">\int_0^t pError(t) \,dt</script> + K<sub>d</sub> * <script type="math/tex">\frac{d pError(t)}{dt}</script></p>
+
+<p><br /> PID Constant Tuning Method:</p>
+<ul>
+  <li>Set K<sub>i</sub> and K<sub>d</sub> = 0. Increase K<sub>p</sub> until system oscillates.</li>
+  <li>Adjust K<sub>i</sub> so oscillations stop.</li>
+  <li>Finally adjust K<sub>d</sub> for fast response.</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
         
-          <p>Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here’s my intutition -</p>
 
+      
+    </div>
 
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/SRMAUV" rel="tag"># SRMAUV</a>
+          
+            
+            <a href="/tag/#/Control%20Systems" rel="tag"># Control Systems</a>
+          
+        </div>
       
 
       
+      
+      
+      
+      
 
       
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
+      
+      
+
       
     </footer>
   </article>
 
-  
-</section>
+  <div class="post-spread">
+    
+  </div>
+</div>
 
 
 
-
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
           </div>
           
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -451,10 +542,27 @@
     <div class="sidebar-inner">
 
       
+        
+        
+        
+
+
+
 
       
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/assets/images/avatar.gif"
@@ -525,6 +633,31 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#proportional-term"> <span class="nav-number">1</span> <span class="nav-text">Proportional Term:</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#integral-term"> <span class="nav-number">2</span> <span class="nav-text">Integral Term:</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#derivative-term"> <span class="nav-number">3</span> <span class="nav-text">Derivative Term:</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

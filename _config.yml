@@ -59,8 +59,8 @@ defaults:
       comments: true
 
 # Atom feed
-feed:
-  path: atom.xml
+#feed:
+#  path: atom.xml
 
 # Plugins
 ## Docs: https://help.github.com/articles/configuring-jekyll-plugins/
@@ -83,8 +83,7 @@ keywords: "Pushkal Katara"
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
 # Set rss to specific value if you have burned your feed already.
-rss:
-
+rss: false
 # Specify the date when the site was setup
 #since: 2015
 
@@ -212,9 +211,11 @@ font:
 # Social Links
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
-#social:
+social:
   #LinkLabel: Link
-
+   Github: https://github.com/pushkalkatara
+   Twitter: https://twitter.com/pushkalkatara
+   Facebook: https://www.facebook.com/contactpushkal
 
 # Social Links Icons
 # Icon Mapping:
@@ -225,9 +226,7 @@ social_icons:
   enable: true
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
-  GitHub: github
-  Twitter: twitter
-  Weibo: weibo
+  GitHub: githuba
 
 
 # Sidebar Avatar

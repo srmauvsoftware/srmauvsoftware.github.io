@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-18T21:34:17+05:30</updated><id>http://localhost:4000/</id><title type="html">HELLO WORLD!</title><author><name>Pushkal Katara</name></author><entry><title type="html">Smach State Machines</title><link href="http://localhost:4000/robotics%20operating%20system/smach/2018/01/22/ROS-MissionPlanner/" rel="alternate" type="text/html" title="Smach State Machines" /><published>2018-01-22T04:59:09+05:30</published><updated>2018-01-22T04:59:09+05:30</updated><id>http://localhost:4000/robotics%20operating%20system/smach/2018/01/22/ROS-MissionPlanner</id><content type="html" xml:base="http://localhost:4000/robotics%20operating%20system/smach/2018/01/22/ROS-MissionPlanner/">&lt;p&gt;Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Fast prototyping: The straightforward Python-based SMACH syntax makes it easy to quickly prototype a state machine and start running it.&lt;/li&gt;
+  &lt;li&gt;Complex state machines: SMACH allows you to design, maintain and debug large, complex hierarchical state machines.&lt;/li&gt;
+  &lt;li&gt;Introspection: SMACH gives you full introspection in your state machines, state transitions, data flow, etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Consider a situation of an AUV which needs to perform tasks underwater autonomously. An autonomous system completely reply on sensor data and as the sensors are noisy, there are always chances of a system to fail. Actions performed underwater by the vehicle should be considered as an state and the state transitions must be logged for further diagonosis. Also to perform specific tasks underwater, states need to be pre-arraged in a mission planner to search, attempt and preempt the task in dynamic conditions. It is basically a robust implementation of decision rules with specified conditions.&lt;/p&gt;
+
+&lt;p&gt;Smach Documentation:&lt;br /&gt;
+Brief: Smach has containers which contains states with defined state outcomes. Each container and state is declared on construction with defined transition outcomes. A state might provide outcomes such as ‘succeeded’, ‘aborted’, or ‘preempted’. These outcomes would be associated with other states, thus forming a transition. Also Smach provides interface to pass data between different states using Input and Output Keys. Also, The State base class includes an interface for coordinating preempt requests between containers and contained states. Further, we can visualize the states and containers with user data using the SMACH Viewer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;I implemented smach in an Autonomous Underwater Vehcile -&lt;br /&gt;
+Initial task of an underwater vehicle is to sink underwater i.e. go to a certain depth underwater. Using the &lt;a href=&quot;http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/&quot;&gt;DepthActionClient&lt;/a&gt;, we can feed a desired depth as a target and the DepthActionServer would try to achieve this depth. But sometimes due to external factors, an AUV may deroute not completeting the DepthGoal. As it as an autonomous system, it needs to be aware of its condition inside. Hence, a SimpleStateMachine Container comes in play. SMACH provides &lt;a href=&quot;http://wiki.ros.org/smach/Tutorials/Simple%20Action%20State&quot;&gt;SimpleActionState&lt;/a&gt; that call directly into the &lt;a href=&quot;http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/&quot;&gt;actionlib interface&lt;/a&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create a StateMachine (‘sink_state’) and assign outcomes [‘sink’, ‘not-sink’]&lt;/li&gt;
+  &lt;li&gt;Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Pushkal Katara</name></author><category term="Mission Planner" /><category term="SMACH" /><category term="SRMAUV" /><summary type="html">Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.</summary></entry><entry><title type="html">Actionlib</title><link href="http://localhost:4000/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/" rel="alternate" type="text/html" title="Actionlib" /><published>2018-01-22T04:59:09+05:30</published><updated>2018-01-22T04:59:09+05:30</updated><id>http://localhost:4000/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib</id><content type="html" xml:base="http://localhost:4000/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/">&lt;p&gt;Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.&lt;/p&gt;
+
+&lt;h2 id=&quot;actionlib-usecase&quot;&gt;Actionlib Usecase&lt;/h2&gt;
+&lt;p&gt;To perform particular tasks in robots we have cases which include sending a request to a node, and also receive a reply to the request.
+We can achieve this using ROS Services but in some cases if the service takes a long time to execute, the user might want the
+ability to cancel the request during execution or get periodic feedback about how the request is progressing. The actionlib package provides -&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Tools to create servers that execute long-running goals that can be preempted.&lt;/li&gt;
+  &lt;li&gt;Client interface to send requests to the server.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Take an example of an underwater vehicle which needs to reach a particular depth. Say from 5m to 10m. So with the DepthServer running in ROS Environment, any client can send
+depth goals to the server stating that the vehicle needs to go to a depth of 10m.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://wiki.ros.org/actionlib?action=AttachFile&amp;amp;do=get&amp;amp;target=client_server_interaction.png&quot; alt=&quot;ROS Server&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;actionlib-message&quot;&gt;Actionlib Message:&lt;/h2&gt;
+
+&lt;p&gt;The ActionClient and ActionServer communicate via a “ROS Action Protocol”. In order for the client and server to communicate, we need to define action specific messages.&lt;/p&gt;
+
+&lt;p&gt;Message Format:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define the goal
+float32 depth_setpoint
+---
+# Define the result
+float32 depth_final
+---
+# Define a feedback message
+float32 depth_error
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;actionlib-cmake-settings&quot;&gt;Actionlib CMake Settings&lt;/h2&gt;
+&lt;p&gt;These files are placed in a package’s ./action directory, lets call it DepthAction.action and the CMakeLists.txt must be updated as&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find_package(catkin REQUIRED genmsg actionlib_msgs actionlib)
+add_action_files(DIRECTORY action FILES Depth.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Further package.xml must be updated as&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;build_depend&amp;gt;actionlib&amp;lt;/build_depend&amp;gt;
+&amp;lt;build_depend&amp;gt;actionlib_msgs&amp;lt;/build_depend&amp;gt;
+&amp;lt;run_depend&amp;gt;actionlib&amp;lt;/run_depend&amp;gt;
+&amp;lt;run_depend&amp;gt;actionlib_msgs&amp;lt;/run_depend&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This would generate following messages:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;DepthAction.msg&lt;/li&gt;
+  &lt;li&gt;DepthActionGoal.msg&lt;/li&gt;
+  &lt;li&gt;DepthActionResult.msg&lt;/li&gt;
+  &lt;li&gt;DepthActionFeedback.msg&lt;/li&gt;
+  &lt;li&gt;DepthGoal.msg&lt;/li&gt;
+  &lt;li&gt;DepthResult.msg&lt;/li&gt;
+  &lt;li&gt;DepthFeedback.msg&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These messages are then used internally by actionlib to communicate between the ActionClient and ActionServer.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h2 id=&quot;actionclient&quot;&gt;ActionClient&lt;/h2&gt;
+&lt;p&gt;Further we need to write ActionServer which keeps searching for ActionClients.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Server%20using%20the%20Execute%20Callback%20%28Python%29&quot;&gt;ActionServer&lt;/a&gt; - Receives the goal from client, tracks its status, performs operation,  and return the results. It also checks if user requested preempts.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Client%20%28Python%29&quot;&gt;ActionClient&lt;/a&gt; - Sends a goal to the ActionServer, can be used in GUIs and Mission Planners to send particular goals in manned and autonomous systems.&lt;br /&gt;
+Here’s my implementation of DepthServer and DepthClient in Autonomous Underwater Vehicle -&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;&quot;&gt;Alpheus Action Server&lt;/a&gt;
+&lt;a href=&quot;&quot;&gt;Alpheus Action Client&lt;/a&gt;&lt;/p&gt;</content><author><name>Pushkal Katara</name></author><category term="Mission Planner" /><category term="Actionlib" /><category term="SRMAUV" /><summary type="html">Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.</summary></entry><entry><title type="html">Proportional-Integral-Derivative Controller</title><link href="http://localhost:4000/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller/" rel="alternate" type="text/html" title="Proportional-Integral-Derivative Controller" /><published>2018-01-21T04:59:08+05:30</published><updated>2018-01-21T04:59:08+05:30</updated><id>http://localhost:4000/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller</id><content type="html" xml:base="http://localhost:4000/control%20systems/2018/01/21/Proportional-Integral-Derivative-Controller/">&lt;p&gt;Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, so here’s my intutition thorugh this post.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;proportional-term&quot;&gt;Proportional Term:&lt;/h2&gt;
+
+&lt;p&gt;Mr. Proportional : He looks at where the output is and compares to what you asked for. Hence it says:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;There is large error : Take Big Action&lt;/li&gt;
+  &lt;li&gt;There is small error : Take Small Action&lt;/li&gt;
+  &lt;li&gt;You have is what you asked for : Take No Action&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So basically what is this error?&lt;br /&gt;
+Take a scenario of depth controller in an AUV, Pressure sensor returns the measured pressure value which is the value you have and now you want to reach a particular pressure value say from 520 to 530. So you’ll probablly have to initiate depth thrusters. The change in PWM of thruster servos must be controlled through a controller, here’s where the controller part comes in to reduce the error form 10 to 0.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pError = Setpoint - SensorValue;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;P&lt;sub&gt;out&lt;/sub&gt; = K&lt;sub&gt;p&lt;/sub&gt; * pError
+K&lt;sub&gt;p&lt;/sub&gt; - Proportional Gain Constant.&lt;br /&gt;
+Issue with P: Steady State Error.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;integral-term&quot;&gt;Integral Term:&lt;/h2&gt;
+
+&lt;p&gt;Mr. Integral : He looks at the same error value, but compares it to how long its been that way and states:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;You have a chronic/acute error (Small errors for long time/ Big error or small time) - Take Big Action&lt;/li&gt;
+  &lt;li&gt;You have mild error (Small error for short time) - Take Small Action&lt;/li&gt;
+  &lt;li&gt;Your error history is neutral - Take No Action&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What is the use of Integral term?&lt;br /&gt;
+Actually when ‘P’ mode alone is used, we would face the offset (+ve or -ve deviation from setpoint) problem.
+Consider the case of heading controller in an AUV, Inertial Measurment Sensor would provide the heading angles, now say a setpoint to turn 30 degree, Proportional would take action generating an offset, making the vehicle oscillate around +ive and  -ive directions of setpoint. In order to nullify steady state error, ‘I’ mode is introduced, Integral action would add up all the error with respect to time and it will track the system to its setpoint.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;iError = iError + pError * dt;  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I&lt;sub&gt;out&lt;/sub&gt; = K&lt;sub&gt;i&lt;/sub&gt; * &lt;script type=&quot;math/tex&quot;&gt;\int_0^t pError(t) \,dt&lt;/script&gt;&lt;br /&gt;
+K&lt;sub&gt;i&lt;/sub&gt; = Integral Gain Constant&lt;/p&gt;
+
+&lt;p&gt;Issue with PI: Overshooting-Integral Windup i.e When large change in setpoint occurs, Integral term accumulates a significant error during the rise, thus overshooting, making PI controller ineffective in dynamic conditions.&lt;br /&gt;
+Amazing example of Integral Windup - &lt;a href=&quot;https://instrumentationtools.com/what-is-integral-wind-up/&quot;&gt;ClickMe&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;derivative-term&quot;&gt;Derivative Term:&lt;/h2&gt;
+
+&lt;p&gt;Mr. Derivative: He also looks at the same error, but compares it to how its changing. He says:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Error is getting bigger: Take bigger action&lt;/li&gt;
+  &lt;li&gt;Error is getting smaller: Take negative action&lt;/li&gt;
+  &lt;li&gt;Error is not changing: Take no action&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What does Derivative Term work on?&lt;br /&gt;
+While driving a car behind someone who is already at stop. As you get closer to them, not only you want to leave the accelerator, but also want to apply brake. This braking action is given by Derivative in PID Controller. It tells to slowdown more if you are getting closer to the target. Derivative control adds another dimension of complexity to control loops. It does have its benefits, but only in special cases.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dError = (pError - previousError);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;D&lt;sub&gt;out&lt;/sub&gt; = K&lt;sub&gt;d&lt;/sub&gt; * &lt;script type=&quot;math/tex&quot;&gt;\frac{d pError(t)}{dt}&lt;/script&gt;&lt;br /&gt;
+K&lt;sub&gt;d&lt;/sub&gt; = Derivative Gain Constant&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;Summing up the above three controllers:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ControlSignal = kp*pError + ki*iError + kd*dError;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;P&lt;sub&gt;out&lt;/sub&gt; + I&lt;sub&gt;out&lt;/sub&gt; + D&lt;sub&gt;out&lt;/sub&gt; =  K&lt;sub&gt;p&lt;/sub&gt; * pError + K&lt;sub&gt;i&lt;/sub&gt; * &lt;script type=&quot;math/tex&quot;&gt;\int_0^t pError(t) \,dt&lt;/script&gt; + K&lt;sub&gt;d&lt;/sub&gt; * &lt;script type=&quot;math/tex&quot;&gt;\frac{d pError(t)}{dt}&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Further this ControlSignal is mapped to the control device output, i.e in the case of AUVs it is the thruster’s servo PWM values or in the case of quadcopters it is PWM to the ESCs.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;pid-constant-tuning&quot;&gt;PID Constant Tuning:&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Set K&lt;sub&gt;i&lt;/sub&gt; and K&lt;sub&gt;d&lt;/sub&gt; = 0. Increase K&lt;sub&gt;p&lt;/sub&gt; until system oscillates.&lt;/li&gt;
+  &lt;li&gt;Adjust K&lt;sub&gt;i&lt;/sub&gt; so oscillations stop.&lt;/li&gt;
+  &lt;li&gt;Finally adjust K&lt;sub&gt;d&lt;/sub&gt; for fast response.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Pushkal Katara</name></author><category term="SRMAUV" /><category term="Control Systems" /><category term="Algorithms" /><summary type="html">Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, so here’s my intutition thorugh this post.</summary></entry></feed>

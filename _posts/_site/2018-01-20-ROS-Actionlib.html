@@ -1,0 +1,74 @@
+<p>Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.</p>
+
+<h2 id="actionlib-usecase">Actionlib Usecase</h2>
+<p>To perform particular tasks in robots we have cases which include sending a request to a node, and also receive a reply to the request.
+We can achieve this using ROS Services but in some cases if the service takes a long time to execute, the user might want the
+ability to cancel the request during execution or get periodic feedback about how the request is progressing. The actionlib package provides -</p>
+<ul>
+  <li>Tools to create servers that execute long-running goals that can be preempted.</li>
+  <li>Client interface to send requests to the server.</li>
+</ul>
+
+<p>Take an example of an underwater vehicle which needs to reach a particular depth. Say from 5m to 10m. So with the DepthServer running in ROS Environment, any client can send
+depth goals to the server stating that the vehicle needs to go to a depth of 10m.</p>
+
+<p><img src="http://wiki.ros.org/actionlib?action=AttachFile&amp;do=get&amp;target=client_server_interaction.png" alt="ROS Server" /></p>
+
+<hr />
+
+<h2 id="actionlib-message">Actionlib Message:</h2>
+
+<p>The ActionClient and ActionServer communicate via a “ROS Action Protocol”. In order for the client and server to communicate, we need to define action specific messages.</p>
+
+<p>Message Format:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># Define the goal
+float32 depth_setpoint
+---
+# Define the result
+float32 depth_final
+---
+# Define a feedback message
+float32 depth_error
+</code></pre>
+</div>
+
+<h2 id="actionlib-cmake-settings">Actionlib CMake Settings</h2>
+<p>These files are placed in a package’s ./action directory, lets call it DepthAction.action and the CMakeLists.txt must be updated as</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>find_package(catkin REQUIRED genmsg actionlib_msgs actionlib)
+add_action_files(DIRECTORY action FILES Depth.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
+</code></pre>
+</div>
+<p>Further package.xml must be updated as</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;build_depend&gt;actionlib&lt;/build_depend&gt;
+&lt;build_depend&gt;actionlib_msgs&lt;/build_depend&gt;
+&lt;run_depend&gt;actionlib&lt;/run_depend&gt;
+&lt;run_depend&gt;actionlib_msgs&lt;/run_depend&gt;
+</code></pre>
+</div>
+
+<p>This would generate following messages:</p>
+<ul>
+  <li>DepthAction.msg</li>
+  <li>DepthActionGoal.msg</li>
+  <li>DepthActionResult.msg</li>
+  <li>DepthActionFeedback.msg</li>
+  <li>DepthGoal.msg</li>
+  <li>DepthResult.msg</li>
+  <li>DepthFeedback.msg</li>
+</ul>
+
+<p>These messages are then used internally by actionlib to communicate between the ActionClient and ActionServer.</p>
+
+<hr />
+<h2 id="actionclient">ActionClient</h2>
+<p>Further we need to write ActionServer which keeps searching for ActionClients.</p>
+
+<ul>
+  <li><a href="http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Server%20using%20the%20Execute%20Callback%20%28Python%29">ActionServer</a> - Receives the goal from client, tracks its status, performs operation,  and return the results. It also checks if user requested preempts.</li>
+  <li><a href="http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Client%20%28Python%29">ActionClient</a> - Sends a goal to the ActionServer, can be used in GUIs and Mission Planners to send particular goals in manned and autonomous systems.<br />
+Here’s my implementation of DepthServer and DepthClient in Autonomous Underwater Vehicle -</li>
+</ul>
+
+<p><a href="">Alpheus Action Server</a>
+<a href="">Alpheus Action Client</a></p>

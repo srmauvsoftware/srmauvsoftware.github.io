@@ -1,0 +1,84 @@
+<p>Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, so here’s my intutition thorugh this post.</p>
+
+<hr />
+
+<h2 id="proportional-term">Proportional Term:</h2>
+
+<p>Mr. Proportional : He looks at where the output is and compares to what you asked for. Hence it says:</p>
+<ul>
+  <li>There is large error : Take Big Action</li>
+  <li>There is small error : Take Small Action</li>
+  <li>You have is what you asked for : Take No Action</li>
+</ul>
+
+<p>So basically what is this error?<br />
+Take a scenario of depth controller in an AUV, Pressure sensor returns the measured pressure value which is the value you have and now you want to reach a particular pressure value say from 520 to 530. So you’ll probablly have to initiate depth thrusters. The change in PWM of thruster servos must be controlled through a controller, here’s where the controller part comes in to reduce the error form 10 to 0.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pError = Setpoint - SensorValue;
+</code></pre>
+</div>
+
+<p>P<sub>out</sub> = K<sub>p</sub> * pError
+K<sub>p</sub> - Proportional Gain Constant.<br />
+Issue with P: Steady State Error.</p>
+
+<hr />
+
+<h2 id="integral-term">Integral Term:</h2>
+
+<p>Mr. Integral : He looks at the same error value, but compares it to how long its been that way and states:</p>
+<ul>
+  <li>You have a chronic/acute error (Small errors for long time/ Big error or small time) - Take Big Action</li>
+  <li>You have mild error (Small error for short time) - Take Small Action</li>
+  <li>Your error history is neutral - Take No Action</li>
+</ul>
+
+<p>What is the use of Integral term?<br />
+Actually when ‘P’ mode alone is used, we would face the offset (+ve or -ve deviation from setpoint) problem.
+Consider the case of heading controller in an AUV, Inertial Measurment Sensor would provide the heading angles, now say a setpoint to turn 30 degree, Proportional would take action generating an offset, making the vehicle oscillate around +ive and  -ive directions of setpoint. In order to nullify steady state error, ‘I’ mode is introduced, Integral action would add up all the error with respect to time and it will track the system to its setpoint.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>iError = iError + pError * dt;  
+</code></pre>
+</div>
+
+<p>I<sub>out</sub> = K<sub>i</sub> * <script type="math/tex">\int_0^t pError(t) \,dt</script><br />
+K<sub>i</sub> = Integral Gain Constant</p>
+
+<p>Issue with PI: Overshooting-Integral Windup i.e When large change in setpoint occurs, Integral term accumulates a significant error during the rise, thus overshooting, making PI controller ineffective in dynamic conditions.<br />
+Amazing example of Integral Windup - <a href="https://instrumentationtools.com/what-is-integral-wind-up/">ClickMe</a></p>
+
+<hr />
+
+<h2 id="derivative-term">Derivative Term:</h2>
+
+<p>Mr. Derivative: He also looks at the same error, but compares it to how its changing. He says:</p>
+<ul>
+  <li>Error is getting bigger: Take bigger action</li>
+  <li>Error is getting smaller: Take negative action</li>
+  <li>Error is not changing: Take no action</li>
+</ul>
+
+<p>What does Derivative Term work on?<br />
+While driving a car behind someone who is already at stop. As you get closer to them, not only you want to leave the accelerator, but also want to apply brake. This braking action is given by Derivative in PID Controller. It tells to slowdown more if you are getting closer to the target. Derivative control adds another dimension of complexity to control loops. It does have its benefits, but only in special cases.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>dError = (pError - previousError);
+</code></pre>
+</div>
+
+<p>D<sub>out</sub> = K<sub>d</sub> * <script type="math/tex">\frac{d pError(t)}{dt}</script><br />
+K<sub>d</sub> = Derivative Gain Constant</p>
+
+<hr />
+<p>Summing up the above three controllers:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>ControlSignal = kp*pError + ki*iError + kd*dError;
+</code></pre>
+</div>
+<p>P<sub>out</sub> + I<sub>out</sub> + D<sub>out</sub> =  K<sub>p</sub> * pError + K<sub>i</sub> * <script type="math/tex">\int_0^t pError(t) \,dt</script> + K<sub>d</sub> * <script type="math/tex">\frac{d pError(t)}{dt}</script></p>
+
+<p>Further this ControlSignal is mapped to the control device output, i.e in the case of AUVs it is the thruster’s servo PWM values or in the case of quadcopters it is PWM to the ESCs.</p>
+
+<p><br /></p>
+<h2 id="pid-constant-tuning">PID Constant Tuning:</h2>
+<ul>
+  <li>Set K<sub>i</sub> and K<sub>d</sub> = 0. Increase K<sub>p</sub> until system oscillates.</li>
+  <li>Adjust K<sub>i</sub> so oscillations stop.</li>
+  <li>Finally adjust K<sub>d</sub> for fast response.</li>
+</ul>

@@ -6,9 +6,10 @@ categories:
 tags:
 - SRMAUV
 - Control Systems
+- Algorithms
 ---
 
-Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, here's my intutition -  
+Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, so here's my intutition thorugh this post.  
 
 ---
 
@@ -79,7 +80,10 @@ ControlSignal = kp*pError + ki*iError + kd*dError;
 ```
 P<sub>out</sub> + I<sub>out</sub> + D<sub>out</sub> =  K<sub>p</sub> * pError + K<sub>i</sub> * $$\int_0^t pError(t) \,dt$$ + K<sub>d</sub> * $$\frac{d pError(t)}{dt}$$  
 
-<br /> PID Constant Tuning Method:
+Further this ControlSignal is mapped to the control device output, i.e in the case of AUVs it is the thruster's servo PWM values or in the case of quadcopters it is PWM to the ESCs.
+
+<br /> 
+## PID Constant Tuning:
 - Set K<sub>i</sub> and K<sub>d</sub> = 0. Increase K<sub>p</sub> until system oscillates.
 - Adjust K<sub>i</sub> so oscillations stop.
 - Finally adjust K<sub>d</sub> for fast response.

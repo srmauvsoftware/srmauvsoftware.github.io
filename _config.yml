@@ -4,7 +4,7 @@
 # ---------------------------------------------------------------
 
 # Site
-title: HELLO WORLD!
+title: HelloWorld!
 subtitle:
 description:
 author: Pushkal Katara
@@ -226,12 +226,12 @@ social_icons:
   enable: true
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
-  GitHub: githuba
+  GitHub: github
 
 
 # Sidebar Avatar
 # in directory: /assets/images/avatar.gif
-#avatar:
+avatar: /assets/images/avatar.jpeg
 
 
 # Table Of Contents in the Sidebar

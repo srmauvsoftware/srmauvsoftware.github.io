@@ -1,6 +1,6 @@
 ---
 title: Smach State Machines
-date: 2018-01-21 23:29:09
+date: 2018-01-05 23:29:09
 categories:
 - Robotics Operating System
 - SMACH
@@ -17,20 +17,24 @@ Robotics Operating System provides SMACH package which is useful when you want a
 * Introspection: SMACH gives you full introspection in your state machines, state transitions, data flow, etc.  
 
 ---
-
+### Application:
 Consider a situation of an AUV which needs to perform tasks underwater autonomously. An autonomous system completely reply on sensor data and as the sensors are noisy, there are always chances of a system to fail. Actions performed underwater by the vehicle should be considered as an state and the state transitions must be logged for further diagonosis. Also to perform specific tasks underwater, states need to be pre-arraged in a mission planner to search, attempt and preempt the task in dynamic conditions. It is basically a robust implementation of decision rules with specified conditions.  
 
-Smach Documentation:  
-Brief: Smach has containers which contains states with defined state outcomes. Each container and state is declared on construction with defined transition outcomes. A state might provide outcomes such as 'succeeded', 'aborted', or 'preempted'. These outcomes would be associated with other states, thus forming a transition. Also Smach provides interface to pass data between different states using Input and Output Keys. Also, The State base class includes an interface for coordinating preempt requests between containers and contained states. Further, we can visualize the states and containers with user data using the SMACH Viewer.  
+### Documentation:  
+Smach has containers which contains states with defined state outcomes. Each container and state is declared on construction with defined transition outcomes. A state might provide outcomes such as 'succeeded', 'aborted', or 'preempted'. These outcomes would be associated with other states, thus forming a transition. Also Smach provides interface to pass data between different states using Input and Output Keys. Also, The State base class includes an interface for coordinating preempt requests between containers and contained states. Further, we can visualize the states and containers with user data using the SMACH Viewer.  
 
 ---
 
-I implemented smach in an Autonomous Underwater Vehcile -  
+### Inference
+I implemented smach in an Autonomous Underwater Vehicle -  
 Initial task of an underwater vehicle is to sink underwater i.e. go to a certain depth underwater. Using the [DepthActionClient](http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/), we can feed a desired depth as a target and the DepthActionServer would try to achieve this depth. But sometimes due to external factors, an AUV may deroute not completeting the DepthGoal. As it as an autonomous system, it needs to be aware of its condition inside. Hence, a SimpleStateMachine Container comes in play. SMACH provides [SimpleActionState](http://wiki.ros.org/smach/Tutorials/Simple%20Action%20State) that call directly into the [actionlib interface](http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/).
 
-1. Create a StateMachine ('sink_state') and assign outcomes ['sink', 'not-sink']
-2. Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.  
+* Create a StateMachine ('sink_state') and assign outcomes ['sink', 'not-sink']
+* Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.  
+![Introspection](/assets/images/alpheus_state.png)  
 
 Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.
 
-1. Create 
+* Create 2 state machines related to depth and heading control.
+* Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.  
+

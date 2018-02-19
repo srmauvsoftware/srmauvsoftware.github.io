@@ -1,6 +1,6 @@
 ---
 title: Proportional-Integral-Derivative Controller
-date: 2018-01-20 23:29:08
+date: 2017-05-17 23:29:08
 categories:
 - Control Systems
 tags:

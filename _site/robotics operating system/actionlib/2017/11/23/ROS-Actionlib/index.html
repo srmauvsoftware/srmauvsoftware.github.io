@@ -83,7 +83,7 @@
 <link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Mission Planner,SMACH,SRMAUV," />
+  <meta name="keywords" content="Mission Planner,Actionlib,SRMAUV," />
 
 
 
@@ -109,17 +109,19 @@
 
 
 
-<meta name="description" content="Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.">
-<meta name="keywords" content="Mission Planner, SMACH, SRMAUV">
+<meta name="description" content="Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.">
+<meta name="keywords" content="Mission Planner, Actionlib, SRMAUV">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Smach State Machines">
-<meta property="og:url" content="http://localhost:4000/robotics%20operating%20system/smach/2018/01/22/ROS-MissionPlanner/">
-<meta property="og:site_name" content="HELLO WORLD!">
-<meta property="og:description" content="Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.">
+<meta property="og:title" content="Actionlib">
+<meta property="og:url" content="http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/">
+<meta property="og:site_name" content="HelloWorld!">
+<meta property="og:description" content="Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://wiki.ros.org/actionlib?action=AttachFile&amp;do=get&amp;target=client_server_interaction.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Smach State Machines">
-<meta name="twitter:description" content="Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.">
+<meta name="twitter:title" content="Actionlib">
+<meta name="twitter:description" content="Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.">
+<meta name="twitter:image" content="http://wiki.ros.org/actionlib?action=AttachFile&amp;do=get&amp;target=client_server_interaction.png">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -152,7 +154,7 @@
 
 
 
-  <title>Smach State Machines</title>
+  <title>Actionlib</title>
   
 
 
@@ -188,7 +190,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">HELLO WORLD!</span>
+        <span class="site-title">HelloWorld!</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -221,6 +223,18 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
           </a>
         </li>
       
@@ -278,16 +292,16 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/robotics%20operating%20system/smach/2018/01/22/ROS-MissionPlanner/">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Pushkal Katara">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="assets/images/avatar.gif">
+      <meta itemprop="image" content="/assets/images/avatar.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HELLO WORLD!">
+      <meta itemprop="name" content="HelloWorld!">
     </span>
 
     
@@ -298,7 +312,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            Smach State Machines
+            Actionlib
           
         </h1>
         
@@ -312,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-22T04:59:09+05:30">
-                2018-01-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-23T04:59:09+05:30">
+                2017-11-23
               </time>
             
 
@@ -348,8 +362,8 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/SMACH" itemprop="url" rel="index">
-                    <span itemprop="name">SMACH</span>
+                  <a href="/category/#/Actionlib" itemprop="url" rel="index">
+                    <span itemprop="name">Actionlib</span>
                   </a>
                 </span>
 
@@ -386,36 +400,80 @@
       
 
       
-        <p>Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.</p>
+        <p>Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.</p>
 
+<h2 id="actionlib-usecase">Actionlib Usecase</h2>
+<p>To perform particular tasks in robots we have cases which include sending a request to a node, and also receive a reply to the request.
+We can achieve this using ROS Services but in some cases if the service takes a long time to execute, the user might want the
+ability to cancel the request during execution or get periodic feedback about how the request is progressing. The actionlib package provides -</p>
 <ul>
-  <li>Fast prototyping: The straightforward Python-based SMACH syntax makes it easy to quickly prototype a state machine and start running it.</li>
-  <li>Complex state machines: SMACH allows you to design, maintain and debug large, complex hierarchical state machines.</li>
-  <li>Introspection: SMACH gives you full introspection in your state machines, state transitions, data flow, etc.</li>
+  <li>Tools to create servers that execute long-running goals that can be preempted.</li>
+  <li>Client interface to send requests to the server.</li>
 </ul>
 
-<hr />
+<p>Take an example of an underwater vehicle which needs to reach a particular depth. Say from 5m to 10m. So with the DepthServer running in ROS Environment, any client can send
+depth goals to the server stating that the vehicle needs to go to a depth of 10m.</p>
 
-<p>Consider a situation of an AUV which needs to perform tasks underwater autonomously. An autonomous system completely reply on sensor data and as the sensors are noisy, there are always chances of a system to fail. Actions performed underwater by the vehicle should be considered as an state and the state transitions must be logged for further diagonosis. Also to perform specific tasks underwater, states need to be pre-arraged in a mission planner to search, attempt and preempt the task in dynamic conditions. It is basically a robust implementation of decision rules with specified conditions.</p>
-
-<p>Smach Documentation:<br />
-Brief: Smach has containers which contains states with defined state outcomes. Each container and state is declared on construction with defined transition outcomes. A state might provide outcomes such as ‘succeeded’, ‘aborted’, or ‘preempted’. These outcomes would be associated with other states, thus forming a transition. Also Smach provides interface to pass data between different states using Input and Output Keys. Also, The State base class includes an interface for coordinating preempt requests between containers and contained states. Further, we can visualize the states and containers with user data using the SMACH Viewer.</p>
+<p><img src="http://wiki.ros.org/actionlib?action=AttachFile&amp;do=get&amp;target=client_server_interaction.png" alt="ROS Server" /></p>
 
 <hr />
 
-<p>I implemented smach in an Autonomous Underwater Vehcile -<br />
-Initial task of an underwater vehicle is to sink underwater i.e. go to a certain depth underwater. Using the <a href="http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/">DepthActionClient</a>, we can feed a desired depth as a target and the DepthActionServer would try to achieve this depth. But sometimes due to external factors, an AUV may deroute not completeting the DepthGoal. As it as an autonomous system, it needs to be aware of its condition inside. Hence, a SimpleStateMachine Container comes in play. SMACH provides <a href="http://wiki.ros.org/smach/Tutorials/Simple%20Action%20State">SimpleActionState</a> that call directly into the <a href="http://pushkalkatara.github.io/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/">actionlib interface</a>.</p>
+<h2 id="actionlib-message">Actionlib Message:</h2>
 
-<ol>
-  <li>Create a StateMachine (‘sink_state’) and assign outcomes [‘sink’, ‘not-sink’]</li>
-  <li>Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.</li>
-</ol>
+<p>The ActionClient and ActionServer communicate via a “ROS Action Protocol”. In order for the client and server to communicate, we need to define action specific messages.</p>
 
-<p>Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.</p>
+<p>Message Format:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># Define the goal
+float32 depth_setpoint
+---
+# Define the result
+float32 depth_final
+---
+# Define a feedback message
+float32 depth_error
+</code></pre>
+</div>
 
-<ol>
-  <li>Create</li>
-</ol>
+<h2 id="actionlib-cmake-settings">Actionlib CMake Settings</h2>
+<p>These files are placed in a package’s ./action directory, lets call it DepthAction.action and the CMakeLists.txt must be updated as</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>find_package(catkin REQUIRED genmsg actionlib_msgs actionlib)
+add_action_files(DIRECTORY action FILES Depth.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
+</code></pre>
+</div>
+<p>Further package.xml must be updated as</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;build_depend&gt;actionlib&lt;/build_depend&gt;
+&lt;build_depend&gt;actionlib_msgs&lt;/build_depend&gt;
+&lt;run_depend&gt;actionlib&lt;/run_depend&gt;
+&lt;run_depend&gt;actionlib_msgs&lt;/run_depend&gt;
+</code></pre>
+</div>
+
+<p>This would generate following messages:</p>
+<ul>
+  <li>DepthAction.msg</li>
+  <li>DepthActionGoal.msg</li>
+  <li>DepthActionResult.msg</li>
+  <li>DepthActionFeedback.msg</li>
+  <li>DepthGoal.msg</li>
+  <li>DepthResult.msg</li>
+  <li>DepthFeedback.msg</li>
+</ul>
+
+<p>These messages are then used internally by actionlib to communicate between the ActionClient and ActionServer.</p>
+
+<hr />
+<h2 id="actionclient">ActionClient</h2>
+<p>Further we need to write ActionServer which keeps searching for ActionClients.</p>
+
+<ul>
+  <li><a href="http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Server%20using%20the%20Execute%20Callback%20%28Python%29">ActionServer</a> - Receives the goal from client, tracks its status, performs operation,  and return the results. It also checks if user requested preempts.</li>
+  <li><a href="http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Client%20%28Python%29">ActionClient</a> - Sends a goal to the ActionServer, can be used in GUIs and Mission Planners to send particular goals in manned and autonomous systems.<br />
+Here’s my implementation of DepthServer and DepthClient in Autonomous Underwater Vehicle -</li>
+</ul>
+
+<p><a href="">Alpheus Action Server</a>
+<a href="">Alpheus Action Client</a></p>
 
       
     </div>
@@ -449,7 +507,7 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
             <a href="/tag/#/Mission%20Planner" rel="tag"># Mission Planner</a>
           
             
-            <a href="/tag/#/SMACH" rel="tag"># SMACH</a>
+            <a href="/tag/#/Actionlib" rel="tag"># Actionlib</a>
           
             
             <a href="/tag/#/SRMAUV" rel="tag"># SRMAUV</a>
@@ -468,14 +526,18 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/" rel="next" title="Smach State Machines">
+                <i class="fa fa-chevron-left"></i> Smach State Machines
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/robotics%20operating%20system/actionlib/2018/01/22/ROS-Actionlib/" rel="prev" title="Actionlib">
-                Actionlib <i class="fa fa-chevron-right"></i>
+              <a href="/control%20systems/2017/05/18/Proportional-Integral-Derivative-Controller/" rel="prev" title="Proportional-Integral-Derivative Controller">
+                Proportional-Integral-Derivative Controller <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -532,11 +594,20 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/assets/images/avatar.jpeg"
                alt="Pushkal Katara" />
           <p class="site-author-name" itemprop="name">Pushkal Katara</p>
            
@@ -632,6 +703,31 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#actionlib-usecase"> <span class="nav-number">1</span> <span class="nav-text">Actionlib Usecase</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#actionlib-message"> <span class="nav-number">2</span> <span class="nav-text">Actionlib Message:</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#actionlib-cmake-settings"> <span class="nav-number">3</span> <span class="nav-text">Actionlib CMake Settings</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#actionclient"> <span class="nav-number">4</span> <span class="nav-text">ActionClient</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

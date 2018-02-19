@@ -9,4 +9,4 @@ I am a Computer Science Undergraduate learning about Artificial Intelligence and
 * [LinkedIn](https://www.linkedin.com/in/pushkal-katara-78a573137/)  
 * [Github](https://github.com/pushkalkatara/)  
 * [Twitter](https://twitter.com/pushkalkatara)  
-* [Facebook](facebook.com/contactpushkal)
+* [Facebook](https://www.facebook.com/contactpushkal)

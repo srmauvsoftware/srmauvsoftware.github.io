@@ -37,5 +37,5 @@ Looking into further states, the complexitiy of mission planner increases. Consi
 
 * Create 2 state machines classes related to depth and heading control.
 * Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
-![Introspection](/assets/images/)  
+![Introspection](/assets/images/smacch.png)  
 Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.

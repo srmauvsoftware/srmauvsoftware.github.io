@@ -76,5 +76,4 @@ Further we need to write ActionServer which keeps searching for ActionClients.
 * [ActionClient](http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Simple%20Action%20Client%20%28Python%29) - Sends a goal to the ActionServer, can be used in GUIs and Mission Planners to send particular goals in manned and autonomous systems.  
 Here's my implementation of DepthServer and DepthClient in Autonomous Underwater Vehicle -  
 
-[Alpheus Action Server]()
-[Alpheus Action Client]()
+![Alpheus Depth Action Server](/assets/images/actionlib/action.gif)

@@ -103,6 +103,9 @@ Looking into further states, the complexitiy of mission planner increases. Consi
 
 Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.
 
+
+Here is a simulation of mission planner tests- 
+
 </content>
       <categories>
         
@@ -198,8 +201,7 @@ Further we need to write ActionServer which keeps searching for ActionClients.
 Here’s my implementation of DepthServer and DepthClient in Autonomous Underwater Vehicle -
 
 
-Alpheus Action Server
-Alpheus Action Client
+
 </content>
       <categories>
         

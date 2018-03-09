@@ -39,3 +39,6 @@ Looking into further states, the complexitiy of mission planner increases. Consi
 * Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
 ![Introspection](/assets/images/mission_planner/smacch.png)  
 Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.
+
+Here is a simulation of mission planner tests- 
+![MissionPlannner](/assets/images/mission_planner/mission.gif)

@@ -31,10 +31,11 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
 
 * Create a StateMachine ('sink_state') and assign outcomes ['sink', 'not-sink']
 * Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.  
-![Introspection](/assets/images/alpheus_state.png)  
+![Introspection](/assets/images/mission_planner/alpheus_state.png)  
 
-Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.
+Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for implementing parallel states.
 
-* Create 2 state machines related to depth and heading control.
-* Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.  
-
+* Create 2 state machines classes related to depth and heading control.
+* Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
+![Introspection](/assets/images/)  
+Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.

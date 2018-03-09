@@ -83,7 +83,7 @@
 <link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Pushkal Katara" />
+  <meta name="keywords" content="Image Processing,Tensorflow,Deep Learning,SSD,Object Classification,Object Detection,SRMAUV," />
 
 
 
@@ -109,14 +109,22 @@
 
 
 
-<meta name="keywords" content="Pushkal Katara">
-<meta property="og:type" content="website">
-<meta property="og:title" content="HelloWorld!">
-<meta property="og:url" content="http://localhost:4000/">
+<meta name="description" content="The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.">
+<meta name="keywords" content="Image Processing, Tensorflow, Deep Learning, SSD, Object Classification, Object Detection, SRMAUV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Object Detection using Deep Learning">
+<meta property="og:url" content="http://localhost:4000/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/">
 <meta property="og:site_name" content="HelloWorld!">
+<meta property="og:description" content="The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/deep_data/1.jpg">
+<meta property="og:image" content="/assets/images/deep_data/2.png">
+<meta property="og:image" content="/assets/images/deep_data/3.png">
+<meta property="og:image" content="/assets/images/deep_data/4.jpg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HelloWorld!">
+<meta name="twitter:title" content="Object Detection using Deep Learning">
+<meta name="twitter:description" content="The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.">
+<meta name="twitter:image" content="/assets/images/deep_data/1.jpg">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -149,7 +157,7 @@
 
 
 
-  <title>HelloWorld!</title>
+  <title>Object Detection using Deep Learning</title>
   
 
 
@@ -174,7 +182,7 @@
   
   
 
-  <div class="container sidebar-position-left page-home ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -276,12 +284,9 @@
           <div id="content" class="content">
             
 
-
-
-<section id="posts" class="posts-expand">
+<div id="posts" class="posts-expand">
   
-    
-    
+  
 
   
 
@@ -310,12 +315,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            
-                
-                <a class="post-title-link" href="/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/" itemprop="url">
-                Object Detection using Deep Learning
-              </a>
-            
+            Object Detection using Deep Learning
           
         </h1>
         
@@ -390,6 +390,8 @@
           
 
           
+            
+          
 
         </div>
       </header>
@@ -401,550 +403,162 @@
       
 
       
+        <p>The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.</p>
+
+<h2 id="solution">Solution</h2>
+<p>I tried using Convolutional Neural Networks for the task. Generally hugh data and training time is required to train CNNs to get perfect results which is not possible in the above task in which generating Gate data is a hard job and traning on high end GPUs is not possible. Workaround over this is Transfer Learning, in short - remove the last fully-connected layer of a pre-trained CNN (this layer’s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. Further fine-tune the weights of the pretrained network by continuing the backpropagation on the Gate’s dataset.
+Amazing referece for Transfer Learning - <a href="http://cs231n.github.io/transfer-learning/">CS231n</a></p>
+
+<p>TensorFlow Object Detection module provides trainable detection models in their <a href="https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md">model zoo</a>. I chose Single Shot MultiBox Detectors(SSD) with MobileNet architecture.
+Reason to chose MobileNet as the architecture - As our hardware is restricted to embedded systems, and dense deep learning models require high computational resources for inference, so i chose a comparatively less dense model which can infere a video feed to detect Gate on a Jetson TX1 with the control and other systems of the repository working parallely.
+Reason to chose <a href="https://towardsdatascience.com/understanding-ssd-multibox-real-time-object-detection-in-deep-learning-495ef744fab">Single Shot MultiBox</a> - Algorithm to draw bounding box on the object which needs to be detected.</p>
+
+<h2 id="procedure">Procedure</h2>
+<ol>
+  <li>Collected 140 images of gate from underwater recording, youtube videos.</li>
+  <li>Label the images using <a href="https://github.com/tzutalin/labelImg">LabelImg</a> tool. It automatically generates the XML.</li>
+  <li>Split the data into test/train samples.</li>
+  <li>Generate TFRecords</li>
+  <li>Setup .config file for the SSD with custom hyperparameters</li>
+  <li>Export graph from trained model.</li>
+  <li>OpenCV optimization for inference on video feed.</li>
+</ol>
+
+<h2 id="dataset">Dataset</h2>
+<p><img src="/assets/images/deep_data/1.jpg" alt="1" width="1000" height="1000" />
+Labelling the dataset for Single Shot Detectors-<br />
+<img src="/assets/images/deep_data/2.png" alt="2" width="1000" height="1000" /></p>
+
+<h2 id="training">Training</h2>
+<p>I trained the model on a Nvidia GTX 960m using CUDA. The tensorboard results -
+<img src="/assets/images/deep_data/3.png" alt="3" width="1000" height="1000" /></p>
+
+<h2 id="inferece">Inferece</h2>
+<p>The results on the test data-set were -
+<img src="/assets/images/deep_data/4.jpg" alt="4" width="1000" height="1000" /></p>
+
+      
+    </div>
+
+    <div>
+      
         
-          <p>The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.</p>
 
+      
+    </div>
 
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Pushkal Katara">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HelloWorld!">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
+        <div class="post-tags">
           
             
-                
-                <a class="post-title-link" href="/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/" itemprop="url">
-                Smach State Machines
+            <a href="/tag/#/Image%20Processing" rel="tag"># Image Processing</a>
+          
+            
+            <a href="/tag/#/Tensorflow" rel="tag"># Tensorflow</a>
+          
+            
+            <a href="/tag/#/Deep%20Learning" rel="tag"># Deep Learning</a>
+          
+            
+            <a href="/tag/#/SSD" rel="tag"># SSD</a>
+          
+            
+            <a href="/tag/#/Object%20Classification" rel="tag"># Object Classification</a>
+          
+            
+            <a href="/tag/#/Object%20Detection" rel="tag"># Object Detection</a>
+          
+            
+            <a href="/tag/#/SRMAUV" rel="tag"># SRMAUV</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/" rel="prev" title="Smach State Machines">
+                Smach State Machines <i class="fa fa-chevron-right"></i>
               </a>
             
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-06T04:59:09+05:30">
-                2018-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Robotics%20Operating%20System" itemprop="url" rel="index">
-                    <span itemprop="name">Robotics Operating System</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/SMACH" itemprop="url" rel="index">
-                    <span itemprop="name">SMACH</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/#more" rel="contents">
-              Read more &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
+        </div>
       
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
       
 
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
       
     </footer>
   </article>
 
-  
+  <div class="post-spread">
     
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Pushkal Katara">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HelloWorld!">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/" itemprop="url">
-                Actionlib
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-23T04:59:09+05:30">
-                2017-11-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Robotics%20Operating%20System" itemprop="url" rel="index">
-                    <span itemprop="name">Robotics Operating System</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Actionlib" itemprop="url" rel="index">
-                    <span itemprop="name">Actionlib</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/control%20systems/2017/05/18/Proportional-Integral-Derivative-Controller/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Pushkal Katara">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HelloWorld!">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/control%20systems/2017/05/18/Proportional-Integral-Derivative-Controller/" itemprop="url">
-                Proportional-Integral-Derivative Controller
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-18T04:59:08+05:30">
-                2017-05-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Control%20Systems" itemprop="url" rel="index">
-                    <span itemprop="name">Control Systems</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Proportional-Integral-Derivative is a control loop feedback mechanism used in industrial control systems. I implemented it in Autonomous Underwater Vehicle, so here’s my intutition thorugh this post.</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/control%20systems/2017/05/18/Proportional-Integral-Derivative-Controller/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-</section>
-
-
-
-
+  </div>
+</div>
+
+
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://pushkalkatara.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
 
           </div>
           
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -962,10 +576,27 @@
     <div class="sidebar-inner">
 
       
+        
+        
+        
+
+
+
 
       
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/assets/images/avatar.jpeg"
@@ -1064,6 +695,31 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#solution"> <span class="nav-number">1</span> <span class="nav-text">Solution</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#procedure"> <span class="nav-number">2</span> <span class="nav-text">Procedure</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#dataset"> <span class="nav-number">3</span> <span class="nav-text">Dataset</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#training"> <span class="nav-number">4</span> <span class="nav-text">Training</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#inferece"> <span class="nav-number">5</span> <span class="nav-text">Inferece</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

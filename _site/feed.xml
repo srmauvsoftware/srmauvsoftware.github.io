@@ -1,4 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-25T04:01:13+05:30</updated><id>http://localhost:4000/</id><title type="html">HelloWorld!</title><author><name>Pushkal Katara</name></author><entry><title type="html">Smach State Machines</title><link href="http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/" rel="alternate" type="text/html" title="Smach State Machines" /><published>2018-01-06T04:59:09+05:30</published><updated>2018-01-06T04:59:09+05:30</updated><id>http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner</id><content type="html" xml:base="http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/">&lt;p&gt;Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-09T19:11:12+05:30</updated><id>http://localhost:4000/</id><title type="html">HelloWorld!</title><author><name>Pushkal Katara</name></author><entry><title type="html">Object Detection using Deep Learning</title><link href="http://localhost:4000/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/" rel="alternate" type="text/html" title="Object Detection using Deep Learning" /><published>2018-02-06T04:59:09+05:30</published><updated>2018-02-06T04:59:09+05:30</updated><id>http://localhost:4000/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors</id><content type="html" xml:base="http://localhost:4000/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/">&lt;p&gt;The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;I tried using Convolutional Neural Networks for the task. Generally hugh data and training time is required to train CNNs to get perfect results which is not possible in the above task in which generating Gate data is a hard job and traning on high end GPUs is not possible. Workaround over this is Transfer Learning, in short - remove the last fully-connected layer of a pre-trained CNN (this layer’s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. Further fine-tune the weights of the pretrained network by continuing the backpropagation on the Gate’s dataset.
+Amazing referece for Transfer Learning - &lt;a href=&quot;http://cs231n.github.io/transfer-learning/&quot;&gt;CS231n&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;TensorFlow Object Detection module provides trainable detection models in their &lt;a href=&quot;https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md&quot;&gt;model zoo&lt;/a&gt;. I chose Single Shot MultiBox Detectors(SSD) with MobileNet architecture.
+Reason to chose MobileNet as the architecture - As our hardware is restricted to embedded systems, and dense deep learning models require high computational resources for inference, so i chose a comparatively less dense model which can infere a video feed to detect Gate on a Jetson TX1 with the control and other systems of the repository working parallely.
+Reason to chose &lt;a href=&quot;https://towardsdatascience.com/understanding-ssd-multibox-real-time-object-detection-in-deep-learning-495ef744fab&quot;&gt;Single Shot MultiBox&lt;/a&gt; - Algorithm to draw bounding box on the object which needs to be detected.&lt;/p&gt;
+
+&lt;h2 id=&quot;procedure&quot;&gt;Procedure&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;Collected 140 images of gate from underwater recording, youtube videos.&lt;/li&gt;
+  &lt;li&gt;Label the images using &lt;a href=&quot;https://github.com/tzutalin/labelImg&quot;&gt;LabelImg&lt;/a&gt; tool. It automatically generates the XML.&lt;/li&gt;
+  &lt;li&gt;Split the data into test/train samples.&lt;/li&gt;
+  &lt;li&gt;Generate TFRecords&lt;/li&gt;
+  &lt;li&gt;Setup .config file for the SSD with custom hyperparameters&lt;/li&gt;
+  &lt;li&gt;Export graph from trained model.&lt;/li&gt;
+  &lt;li&gt;OpenCV optimization for inference on video feed.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;dataset&quot;&gt;Dataset&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/deep_data/1.jpg&quot; alt=&quot;1&quot; width=&quot;1000&quot; height=&quot;1000&quot; /&gt;
+Labelling the dataset for Single Shot Detectors-&lt;br /&gt;
+&lt;img src=&quot;/assets/images/deep_data/2.png&quot; alt=&quot;2&quot; width=&quot;1000&quot; height=&quot;1000&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;training&quot;&gt;Training&lt;/h2&gt;
+&lt;p&gt;I trained the model on a Nvidia GTX 960m using CUDA. The tensorboard results -
+&lt;img src=&quot;/assets/images/deep_data/3.png&quot; alt=&quot;3&quot; width=&quot;1000&quot; height=&quot;1000&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;inferece&quot;&gt;Inferece&lt;/h2&gt;
+&lt;p&gt;The results on the test data-set were -
+&lt;img src=&quot;/assets/images/deep_data/4.jpg&quot; alt=&quot;4&quot; width=&quot;1000&quot; height=&quot;1000&quot; /&gt;&lt;/p&gt;</content><author><name>Pushkal Katara</name></author><category term="Image Processing" /><category term="Tensorflow" /><category term="Deep Learning" /><category term="SSD" /><category term="Object Classification" /><category term="Object Detection" /><category term="SRMAUV" /><summary type="html">The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.</summary></entry><entry><title type="html">Smach State Machines</title><link href="http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/" rel="alternate" type="text/html" title="Smach State Machines" /><published>2018-01-06T04:59:09+05:30</published><updated>2018-01-06T04:59:09+05:30</updated><id>http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner</id><content type="html" xml:base="http://localhost:4000/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/">&lt;p&gt;Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Fast prototyping: The straightforward Python-based SMACH syntax makes it easy to quickly prototype a state machine and start running it.&lt;/li&gt;
@@ -22,14 +54,16 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
 &lt;ul&gt;
   &lt;li&gt;Create a StateMachine (‘sink_state’) and assign outcomes [‘sink’, ‘not-sink’]&lt;/li&gt;
   &lt;li&gt;Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.&lt;br /&gt;
-&lt;img src=&quot;/assets/images/alpheus_state.png&quot; alt=&quot;Introspection&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/mission_planner/alpheus_state.png&quot; alt=&quot;Introspection&quot; /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.&lt;/p&gt;
+&lt;p&gt;Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for implementing parallel states.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Create 2 state machines related to depth and heading control.&lt;/li&gt;
-  &lt;li&gt;Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.&lt;/li&gt;
+  &lt;li&gt;Create 2 state machines classes related to depth and heading control.&lt;/li&gt;
+  &lt;li&gt;Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
+&lt;img src=&quot;/assets/images/&quot; alt=&quot;Introspection&quot; /&gt;&lt;br /&gt;
+Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.&lt;/li&gt;
 &lt;/ul&gt;</content><author><name>Pushkal Katara</name></author><category term="Mission Planner" /><category term="SMACH" /><category term="SRMAUV" /><summary type="html">Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.</summary></entry><entry><title type="html">Actionlib</title><link href="http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/" rel="alternate" type="text/html" title="Actionlib" /><published>2017-11-23T04:59:09+05:30</published><updated>2017-11-23T04:59:09+05:30</updated><id>http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib</id><content type="html" xml:base="http://localhost:4000/robotics%20operating%20system/actionlib/2017/11/23/ROS-Actionlib/">&lt;p&gt;Robotics Operating System provides actionlib package which is a robust implementation to perfrom tasks in a robot, I implemented Actionlib in Autonomous Underwater Vehicle’s software stack to perfrom goals under water with logging states.&lt;/p&gt;
 
 &lt;h2 id=&quot;actionlib-usecase&quot;&gt;Actionlib Usecase&lt;/h2&gt;

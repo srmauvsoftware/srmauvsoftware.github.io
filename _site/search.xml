@@ -2,6 +2,70 @@
 <search>
   
     <entry>
+      <title>Object Detection using Deep Learning></title>
+      <url>/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/</url>
+      <content type="text">The problem statement included a task to detect a Gate and different colored buoys placed underwater through which an AUV should pass. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn’t work well even with histogram equlization due to change in color of gate due to different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.
+
+Solution
+I tried using Convolutional Neural Networks for the task. Generally hugh data and training time is required to train CNNs to get perfect results which is not possible in the above task in which generating Gate data is a hard job and traning on high end GPUs is not possible. Workaround over this is Transfer Learning, in short - remove the last fully-connected layer of a pre-trained CNN (this layer’s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. Further fine-tune the weights of the pretrained network by continuing the backpropagation on the Gate’s dataset.
+Amazing referece for Transfer Learning - CS231n
+
+TensorFlow Object Detection module provides trainable detection models in their model zoo. I chose Single Shot MultiBox Detectors(SSD) with MobileNet architecture.
+Reason to chose MobileNet as the architecture - As our hardware is restricted to embedded systems, and dense deep learning models require high computational resources for inference, so i chose a comparatively less dense model which can infere a video feed to detect Gate on a Jetson TX1 with the control and other systems of the repository working parallely.
+Reason to chose Single Shot MultiBox - Algorithm to draw bounding box on the object which needs to be detected.
+
+Procedure
+
+  Collected 140 images of gate from underwater recording, youtube videos.
+  Label the images using LabelImg tool. It automatically generates the XML.
+  Split the data into test/train samples.
+  Generate TFRecords
+  Setup .config file for the SSD with custom hyperparameters
+  Export graph from trained model.
+  OpenCV optimization for inference on video feed.
+
+
+Dataset
+
+Labelling the dataset for Single Shot Detectors-
+
+
+Training
+I trained the model on a Nvidia GTX 960m using CUDA. The tensorboard results -
+
+
+Inferece
+The results on the test data-set were -
+
+</content>
+      <categories>
+        
+          <category> Deep Learning </category>
+        
+          <category> Image Processing </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> Image Processing </tag>
+        
+          <tag> Tensorflow </tag>
+        
+          <tag> Deep Learning </tag>
+        
+          <tag> SSD </tag>
+        
+          <tag> Object Classification </tag>
+        
+          <tag> Object Detection </tag>
+        
+          <tag> SRMAUV </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
       <title>Smach State Machines></title>
       <url>/robotics%20operating%20system/smach/2018/01/06/ROS-MissionPlanner/</url>
       <content type="text">Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.
@@ -31,12 +95,13 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
 
 
 
-Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.
+Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for implementing parallel states.
 
 
-  Create 2 state machines related to depth and heading control.
+  Create 2 state machines classes related to depth and heading control.
   Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
 
+Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.
 
 </content>
       <categories>

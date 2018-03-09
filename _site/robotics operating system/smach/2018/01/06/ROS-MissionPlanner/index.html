@@ -117,11 +117,12 @@
 <meta property="og:site_name" content="HelloWorld!">
 <meta property="og:description" content="Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="/assets/images/alpheus_state.png">
+<meta property="og:image" content="/assets/images/mission_planner/alpheus_state.png">
+<meta property="og:image" content="/assets/images/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Smach State Machines">
 <meta name="twitter:description" content="Robotics Operating System provides SMACH package which is useful when you want a robot to execute some complex plan, where all possible states and state transitions can be described explicitly. This basically takes the hacking out of hacking together different modules to make robotics systems perform specific complex tasks with state management.">
-<meta name="twitter:image" content="/assets/images/alpheus_state.png">
+<meta name="twitter:image" content="/assets/images/mission_planner/alpheus_state.png">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -424,16 +425,17 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
 <ul>
   <li>Create a StateMachine (‘sink_state’) and assign outcomes [‘sink’, ‘not-sink’]</li>
   <li>Create a Callback to check the output received from Actionlib and SimpleActionState to send the goal, further decide the outcome of the state as sink or not sink.<br />
-<img src="/assets/images/alpheus_state.png" alt="Introspection" /></li>
+<img src="/assets/images/mission_planner/alpheus_state.png" alt="Introspection" /></li>
 </ul>
 
-<p>Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for controlling parallel states.</p>
+<p>Looking into further states, the complexitiy of mission planner increases. Consider a situtation in which an AUV needs to turn at an angle 30 degrees with a depth goal of extra 10m deep. These are two parallel states which needs to be achieved using the DepthActionClient and DepthActionServer. SMACH provides Concurrent State Machines for implementing parallel states.</p>
 
 <ul>
-  <li>Create 2 state machines related to depth and heading control.</li>
-  <li>Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.</li>
+  <li>Create 2 state machines classes related to depth and heading control.</li>
+  <li>Create a callback to check the output recevied from Actionlib and SimpleActionState to send the goal, further callback decides the next state accroding to the reply from actionlib.
+<img src="/assets/images/" alt="Introspection" /><br />
+Similarly all the tasks to be performed can be implemented in Hierarchical, Concurrent, Sequence or Iterative methods using Smach library.</li>
 </ul>
-
 
       
     </div>
@@ -485,6 +487,10 @@ Initial task of an underwater vehicle is to sink underwater i.e. go to a certain
       
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/deep%20learning/image%20processing/2018/02/06/SingleShotDetectors/" rel="next" title="Object Detection using Deep Learning">
+                <i class="fa fa-chevron-left"></i> Object Detection using Deep Learning
+              </a>
             
           </div>
 
@@ -597,7 +603,7 @@ s.setAttribute('data-timestamp', +new Date());
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -608,7 +614,7 @@ s.setAttribute('data-timestamp', +new Date());
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -619,7 +625,7 @@ s.setAttribute('data-timestamp', +new Date());
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

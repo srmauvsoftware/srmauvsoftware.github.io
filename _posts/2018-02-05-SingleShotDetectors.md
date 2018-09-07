@@ -14,7 +14,7 @@ tags:
 - SRMAUV
 ---
 
-Basic task of an Autonomous Underwater Vehicle is to detect an object underwater. Our problem statement included to detect a gate and an AUV should pass through the gate. Basic image processing techniques like RGB, HSV or Lab colorspace filteration didn't work well even with histogram equlizations due to change in color of gate with different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw a bounding box over the pipes of the Gate.
+Basic task of an Autonomous Underwater Vehicle is to detect an object underwater. Our problem statement included to detect a gate and an AUV should pass through the gate. Basic image processing techniques like RGB, HSV or Lab colorspace filtration didn't work well even with histogram equlizations due to change in color of gate in different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw bounding boxes over the pipes of the Gate.
 
 ## Solution  
 I tried using Convolutional Neural Networks for the task. Generally hugh data and training time is required to train CNNs from scratch to get perfect results which is not possible in the above task in which generating a large dataset containing Gate images is a hard job and traning on high end GPUs is very expensive. Workaround over this is Transfer Learning, in short - remove the last fully-connected layer of a pre-trained CNN (this layer’s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. Further fine-tune the weights of the pretrained network by continuing the backpropagation on the Gate's dataset.

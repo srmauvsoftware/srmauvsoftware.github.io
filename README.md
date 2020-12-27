@@ -6,11 +6,11 @@
 
 ## About
 
-**SRMAUV** is an under-graduate student team of SRM Institute of Science and Technology, founded in the year 2013. This team of underwater robotics enthusiasts share our common interest in designing Autonomous Underwater Vehicles. It comprises of members of several domains including Computer Science, Electrical and Mechatronics. Currently building the fifth iteration of the vehicle (ZARNA 2.0), the team works around the year doing research in underwater robotics, prototyping models, and testing the vehicle. The team participates in various national and international competitions such as [Robosub](https://robosub.org/), [NIOT SAVe](ttp://www.indiamts.com/activities%20Report/6th_National_Competition_on_Student_Autonomous_underwater_Vehicle_SAVe_2019.pdf) and [SAUVC](https://sauvc.org/).
+**SRMAUV** is an under-graduate student team of [SRM Institute of Science and Technology](https://www.srmist.edu.in/), founded in the year 2013. This team of underwater robotics enthusiasts share our common interest in designing Autonomous Underwater Vehicles. It comprises of members of several domains including Computer Science, Electrical and Mechatronics. Currently building the fifth iteration of the vehicle ([ZARNA](./vehicle_specs.html) 2.0), the team works around the year doing research in underwater robotics, prototyping models, and testing the vehicle. The team participates in various national and international competitions such as [Robosub](https://robosub.org/), [NIOT SAVe](ttp://www.indiamts.com/activities%20Report/6th_National_Competition_on_Student_Autonomous_underwater_Vehicle_SAVe_2019.pdf) and [SAUVC](https://sauvc.org/).
 
 ---
 ## Achievements 🏆
-
+> 
 - National Champions: Secured [first place](https://www.srmist.edu.in/acdemics/srmauv-team-wins-national-championship-save-2015) at NIOT (National Institute for Ocean Technology) SAVe competition held in Chennai in 2015.
 - Sponsored by the Indian Government to participate in AUVSI’s international [Robosub](https://robosub.org/) competition at San Diego, USA in 2015 to represent India.
 - Received [NVIDIA GPU-grant](https://developer.nvidia.com/gpu-grant-application) sponsorship for vehicle.
@@ -20,7 +20,7 @@
 - Presented novel underwater 3D simulation framework at IEEE OES - [Underwater Technology '19](https://ieeeoes.org/oes-beacon/june-2019-beacon/underwater-technology-2019-ut19-kaohsiung-taiwan-16-19-april-2019/) conference in Kaohsiung, Taiwan.
 
 ---
-## Vehicle
+## Vehicle ⛴
 
 #### ZARNA
 
@@ -46,6 +46,16 @@ More vehicle specifications [here](./vehicle_specs.html).
 - [PID controller]()
 
 --- -->
+
+## Simulation 🎮
+
+Open Source Simulator for Unmanned Underwater Vehicles using ROS and Unity3D.
+
+[Website](https://srmauvsoftware.github.io/URSim/) / [Code](https://github.com/srmauvsoftware/URSim) / [Paper](https://ieeexplore.ieee.org/document/8734309) / [Presentation](https://docs.google.com/presentation/d/1ChLeVlUOYZ9LOEp-kk0C3HupoHN2Ctm8oyvjrr45BvY/edit?usp=sharing) 
+
+![](assets/img/vehicle/unity_scene.png) | ![](https://user-images.githubusercontent.com/24846546/97696046-ff11ba80-1aca-11eb-959c-0ea5ae61bc6d.gif)
+
+***
 
 ## Publication 📃
 

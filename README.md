@@ -55,8 +55,6 @@ Open Source Simulator for Unmanned Underwater Vehicles using ROS and Unity3D.
 
 ![](assets/img/vehicle/unity_scene.png) | ![](https://user-images.githubusercontent.com/24846546/97696046-ff11ba80-1aca-11eb-959c-0ea5ae61bc6d.gif)
 
-***
-
 ## Publication 📃
 
 ```
@@ -95,8 +93,6 @@ Code for vehicle's software stack, underwater simulation framework, deep learnin
 ![](assets/img/logo/srm_logo.png) | ![](assets/img/sponsors/nvidia.jpg) | ![](assets/img/sponsors/ak.png)
 ![](assets/img/sponsors/bluerob.png) | ![](assets/img/sponsors/niot.jpg) | ![](assets/img/sponsors/solidworks.png)
 ![](assets/img/sponsors/siic.png) | ![](assets/img/sponsors/ids.png) | ![](assets/img/sponsors/sparton.png)
-
-***
 
 ## Contact 📧
 

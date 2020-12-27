@@ -4,9 +4,13 @@ layout: default
 
 ## Underwater Object Detection using Deep Learning
 
-[back](./)
+[[back]](./)
 
-Basic task of an Autonomous Underwater Vehicle is to detect an object underwater. Our problem statement included to detect a gate and an AUV should pass through the gate. Basic image processing techniques like RGB, HSV or Lab colorspace filtration didn't work well even with histogram equlizations due to change in color of gate in different lightning conditions underwater. So I tried to implement Deep Learning to classify, detect and draw bounding boxes over the pipes of the Gate.
+![](/assets/img/blog/inference.jpg)
+
+Underwater object detection is one of the most fundamental tasks of an Autonomous Underwater Vehicle (AUV). The problem statement includes detecting a gate-shaped structured inside the water and navigating through its middle. 
+
+For detecting the gate, we found that basic image processing techniques like RGB, HSV or Lab colorspace thresholding did not work well (even with histogram equlizations) because of changes in lighting conditions inside the water during different times of the day. So we tried using deep CNN architectures for detecting and classifying the pipes of the gate.
 
 ## Solution  
 I tried using Convolutional Neural Networks for the task. Generally hugh data and training time is required to train CNNs from scratch to get perfect results which is not possible in the above task in which generating a large dataset containing Gate images is a hard job and traning on high end GPUs is very expensive. Workaround over this is Transfer Learning, in short - remove the last fully-connected layer of a pre-trained CNN (this layer’s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. Further fine-tune the weights of the pretrained network by continuing the backpropagation on the Gate's dataset.
@@ -26,14 +30,15 @@ Reason to chose [Single Shot MultiBox Detectors](https://towardsdatascience.com/
 7. OpenCV optimization for inference on video feed.
 
 ## Dataset
-<img src="/assets/images/deep_data/1.jpg" alt="1" width="1000" height="1000">
+![](/assets/img/blog/dataset.jpg)
 Labelling the dataset for Single Shot Detectors-  
-<img src="/assets/images/deep_data/2.png" alt="2" width="1000" height="1000">
+![](/assets/img/blog/labelling.png)
 
 ## Training
 I trained the model on a Nvidia GTX 960m using CUDA. The tensorboard results -
-<img src="/assets/images/deep_data/3.png" alt="3" width="1000" height="1000">
+![](/assets/img/blog/tensorboard.png)
 
 ## Inferece  
 The results on the test data-set were -
-<img src="/assets/images/deep_data/4.jpg" alt="4" width="1000" height="1000">
+![](/assets/img/blog/inference.jpg)
+
